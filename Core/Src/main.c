@@ -48,6 +48,20 @@ const osThreadAttr_t defaultTask_attributes = {
   .priority = (osPriority_t) osPriorityNormal,
   .stack_size = 128 * 4
 };
+/* Definitions for BlinkRed */
+osThreadId_t BlinkRedHandle;
+const osThreadAttr_t BlinkRed_attributes = {
+  .name = "BlinkRed",
+  .priority = (osPriority_t) osPriorityNormal,
+  .stack_size = 128 * 4
+};
+/* Definitions for BlinkBlue */
+osThreadId_t BlinkBlueHandle;
+const osThreadAttr_t BlinkBlue_attributes = {
+  .name = "BlinkBlue",
+  .priority = (osPriority_t) osPriorityBelowNormal,
+  .stack_size = 128 * 4
+};
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -56,6 +70,8 @@ const osThreadAttr_t defaultTask_attributes = {
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 void StartDefaultTask(void *argument);
+void StartBlinkRed(void *argument);
+void StartBlinkBlue(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -120,6 +136,12 @@ int main(void)
   /* Create the thread(s) */
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+
+  /* creation of BlinkRed */
+  BlinkRedHandle = osThreadNew(StartBlinkRed, NULL, &BlinkRed_attributes);
+
+  /* creation of BlinkBlue */
+  BlinkBlueHandle = osThreadNew(StartBlinkBlue, NULL, &BlinkBlue_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -224,6 +246,42 @@ void StartDefaultTask(void *argument)
     osDelay(1);
   }
   /* USER CODE END 5 */
+}
+
+/* USER CODE BEGIN Header_StartBlinkRed */
+/**
+* @brief Function implementing the BlinkRed thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartBlinkRed */
+void StartBlinkRed(void *argument)
+{
+  /* USER CODE BEGIN StartBlinkRed */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartBlinkRed */
+}
+
+/* USER CODE BEGIN Header_StartBlinkBlue */
+/**
+* @brief Function implementing the BlinkBlue thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartBlinkBlue */
+void StartBlinkBlue(void *argument)
+{
+  /* USER CODE BEGIN StartBlinkBlue */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartBlinkBlue */
 }
 
  /**
