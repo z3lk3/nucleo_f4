@@ -274,7 +274,7 @@ void StartBlinkRed(void *argument)
   for(;;)
   {
 	  HAL_GPIO_TogglePin(LEDR1_GPIO_Port, LEDR1_Pin);
-	  osDelay(500);
+	  osDelay(1000);
     //osDelay(1);
   }
   /* USER CODE END StartBlinkRed */
