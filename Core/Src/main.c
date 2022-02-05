@@ -99,7 +99,7 @@ uint8_t i=0;
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	printf("Starting scheduler\n");
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -283,10 +283,18 @@ void StartBlinkRed(void *argument)
   /* Infinite loop */
   for(;;)
   {
+	  printf("/*----------------------*/\n");
+	  printf("Entering BlinkRed task\n");
+
 	  HAL_GPIO_TogglePin(LEDR1_GPIO_Port, LEDR1_Pin);
+
+	  printf("LEDR1_Pin toggled\n");
+	  printf("Initiating 1s OS delay\n");
+
 	  osDelay(1000);
-	  i++;
-	  printf("Hello %d\n",i);
+
+	  printf("OS delay of 1s passed, continuing with BlinkRed task\n");
+	  printf("Leaving BlinkRed task\n");
     //osDelay(1);
   }
   /* USER CODE END StartBlinkRed */
@@ -305,10 +313,26 @@ void StartBlinkBlue(void *argument)
   /* Infinite loop */
   for(;;)
   {
+	  printf("/*----------------------*/\n");
+	  printf("Entering BlinkBlue task\n");
+
 	  HAL_GPIO_WritePin(LEDB1_GPIO_Port, LEDB1_Pin, GPIO_PIN_SET);
+
+	  printf("LEDB1_Pin SET high\n");
+	  printf("Initiating 1s OS delay\n");
+
 	  osDelay(1000);
+
+	  printf("OS delay of 1s passed, continuing with BlinkBlue task\n");
+
 	  HAL_GPIO_WritePin(LEDB1_GPIO_Port, LEDB1_Pin, GPIO_PIN_RESET);
+	  printf("LEDB1_Pin RESET (SET low)\n");
+	  printf("Initiating 1s OS delay\n");
+
 	  osDelay(1000);
+
+	  printf("OS delay of 1s passed, continuing with BlinkRed task\n");
+
     //osDelay(1);
   }
   /* USER CODE END StartBlinkBlue */
