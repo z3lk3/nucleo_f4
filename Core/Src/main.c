@@ -21,6 +21,7 @@
 #include "main.h"
 #include "cmsis_os.h"
 
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -63,6 +64,11 @@ const osThreadAttr_t BlinkBlue_attributes = {
   .name = "BlinkBlue",
   .priority = (osPriority_t) osPriorityBelowNormal,
   .stack_size = 128 * 4
+};
+/* Definitions for BlinkSemaphore */
+osSemaphoreId_t BlinkSemaphoreHandle;
+const osSemaphoreAttr_t BlinkSemaphore_attributes = {
+  .name = "BlinkSemaphore"
 };
 /* USER CODE BEGIN PV */
 
@@ -130,6 +136,10 @@ int main(void)
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
+
+  /* Create the semaphores(s) */
+  /* creation of BlinkSemaphore */
+  BlinkSemaphoreHandle = osSemaphoreNew(1, 1, &BlinkSemaphore_attributes);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
@@ -285,17 +295,35 @@ void StartBlinkRed(void *argument)
   {
 	  printf("/*----------------------*/\n");
 	  printf("Entering BlinkRed task\n");
+	  printf("Waiting for semaphore\n");
+
+	  osSemaphoreAcquire(BlinkSemaphoreHandle, osWaitForever);
+
+	  printf("Semaphore acquired\n");
 
 	  HAL_GPIO_TogglePin(LEDR1_GPIO_Port, LEDR1_Pin);
 
 	  printf("LEDR1_Pin toggled\n");
-	  printf("Initiating 1s OS delay\n");
+	  printf("Initiating 0,5s OS delay\n");
 
-	  osDelay(1000);
+	  osDelay(500);
 
-	  printf("OS delay of 1s passed, continuing with BlinkRed task\n");
+	  printf("OS delay of 0,5s passed, continuing with BlinkRed task\n");
+
+	  HAL_GPIO_TogglePin(LEDR1_GPIO_Port, LEDR1_Pin);
+
+	  printf("LEDR1_Pin toggled\n");
+
+	  osSemaphoreRelease(BlinkSemaphoreHandle);
+
+	  printf("Semaphore released(BlinkRed task)\n");
+
+	  printf("Initiating 0,5s OS delay\n");
+
+	  osDelay(500);
+
+	  printf("OS delay of 0,5s passed, continuing with BlinkRed task\n");
 	  printf("Leaving BlinkRed task\n");
-    //osDelay(1);
   }
   /* USER CODE END StartBlinkRed */
 }
@@ -315,25 +343,34 @@ void StartBlinkBlue(void *argument)
   {
 	  printf("/*----------------------*/\n");
 	  printf("Entering BlinkBlue task\n");
+	  printf("Waiting for semaphore\n");
 
-	  HAL_GPIO_WritePin(LEDB1_GPIO_Port, LEDB1_Pin, GPIO_PIN_SET);
+	  osSemaphoreAcquire(BlinkSemaphoreHandle, osWaitForever);
 
-	  printf("LEDB1_Pin SET high\n");
-	  printf("Initiating 1s OS delay\n");
+	  printf("Semaphore acquired\n");
 
-	  osDelay(1000);
+	  HAL_GPIO_TogglePin(LEDB1_GPIO_Port, LEDB1_Pin);
 
-	  printf("OS delay of 1s passed, continuing with BlinkBlue task\n");
+	  printf("LEDB1_Pin toggled\n");
+	  printf("Initiating 0,5s OS delay\n");
 
-	  HAL_GPIO_WritePin(LEDB1_GPIO_Port, LEDB1_Pin, GPIO_PIN_RESET);
-	  printf("LEDB1_Pin RESET (SET low)\n");
-	  printf("Initiating 1s OS delay\n");
+	  osDelay(500);
 
-	  osDelay(1000);
+	  printf("OS delay of 0,5s passed, continuing with BlinkBlue task\n");
 
-	  printf("OS delay of 1s passed, continuing with BlinkRed task\n");
+	  HAL_GPIO_TogglePin(LEDB1_GPIO_Port, LEDB1_Pin);
 
-    //osDelay(1);
+	  printf("LEDB1_Pin toggled\n");
+
+	  osSemaphoreRelease(BlinkSemaphoreHandle);
+
+	  printf("Semaphore released(BlinkBlue task)\n");
+	  printf("Initiating 0,5s OS delay\n");
+
+	  osDelay(500);
+
+	  printf("OS delay of 0,5s passed, continuing with BlinkBlue task\n");
+	  printf("Leaving BlinkBlue task\n");
   }
   /* USER CODE END StartBlinkBlue */
 }
