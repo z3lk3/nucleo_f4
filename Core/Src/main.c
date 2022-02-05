@@ -24,6 +24,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "stdio.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -80,6 +82,21 @@ void StartBlinkBlue(void *argument);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+//int _write(int file, char *ptr, int len)
+//{
+//	int i=0;
+//	for(i=0 ; i<len ; i++)
+//		ITM_SendChar((*ptr++));
+//	return len;
+//}
+
+int __io_putchar(int ch)
+{
+	ITM_SendChar(ch);
+	return(ch);
+}
+
+uint8_t count=0;
 /* USER CODE END 0 */
 
 /**
@@ -275,6 +292,8 @@ void StartBlinkRed(void *argument)
   {
 	  HAL_GPIO_TogglePin(LEDR1_GPIO_Port, LEDR1_Pin);
 	  osDelay(1000);
+	  count++;
+	  printf("Hello %d",count);
     //osDelay(1);
   }
   /* USER CODE END StartBlinkRed */
